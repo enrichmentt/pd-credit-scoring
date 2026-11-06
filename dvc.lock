@@ -1,0 +1,67 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python -m src.data.prepare
+    deps:
+    - path: data/raw/UCI_Credit_Card.csv
+      hash: md5
+      md5: 940b416bb13a9b24bb5c9e1589284005
+      size: 2862995
+    - path: src/data/prepare.py
+      hash: md5
+      md5: 6edd6ec41e20a1d7b7204084f3a69e2a
+      size: 3580
+    - path: src/features/build_features.py
+      hash: md5
+      md5: 4866cbc8ef197d3437a95b480953c6dc
+      size: 2746
+    - path: src/validation/schema.py
+      hash: md5
+      md5: 32d90e9aefb7b555e49152f8a78d9652
+      size: 1859
+    params:
+      params.yaml:
+        prepare.random_state: 42
+        prepare.test_size: 0.2
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: c12a22265d9eb63d97e3830a04e865fb
+      size: 1191727
+    - path: data/processed/train.csv
+      hash: md5
+      md5: e7f73d86d790245519f886bb7c7e91f9
+      size: 4767910
+  train:
+    cmd: python -m src.models.train --quick --save-artifacts
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: c12a22265d9eb63d97e3830a04e865fb
+      size: 1191727
+    - path: data/processed/train.csv
+      hash: md5
+      md5: e7f73d86d790245519f886bb7c7e91f9
+      size: 4767910
+    - path: src/features/build_features.py
+      hash: md5
+      md5: 4866cbc8ef197d3437a95b480953c6dc
+      size: 2746
+    - path: src/models/train.py
+      hash: md5
+      md5: e892beae87a47c034b8dff741ba1fc7b
+      size: 8400
+    params:
+      params.yaml:
+        train.cv: 3
+        train.model: gradient_boosting
+        train.run_name: gb_dvc_pipeline
+    outs:
+    - path: models/model.joblib
+      hash: md5
+      md5: a9e10c10f8b79cbcaad2d14830f9e899
+      size: 148237
+    - path: reports/metrics.json
+      hash: md5
+      md5: 1b09eeace973b8b641e76260793f25d8
+      size: 296

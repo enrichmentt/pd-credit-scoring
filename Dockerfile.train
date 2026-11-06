@@ -1,0 +1,13 @@
+# Образ для обучения / воспроизведения пайплайна (опционально).
+# API-образ собирается из корневого Dockerfile.
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# Воспроизведение всего пайплайна: prepare -> train
+CMD ["python", "-m", "dvc", "repro"]

@@ -1,0 +1,31 @@
+stages:
+  prepare:
+    cmd: python -m src.data.prepare
+    deps:
+      - data/raw/UCI_Credit_Card.csv
+      - src/data/prepare.py
+      - src/features/build_features.py
+      - src/validation/schema.py
+    params:
+      - prepare.test_size
+      - prepare.random_state
+    outs:
+      - data/processed/train.csv
+      - data/processed/test.csv
+
+  train:
+    cmd: python -m src.models.train --quick --save-artifacts
+    deps:
+      - data/processed/train.csv
+      - data/processed/test.csv
+      - src/models/train.py
+      - src/features/build_features.py
+    params:
+      - train.model
+      - train.run_name
+      - train.cv
+    outs:
+      - models/model.joblib
+    metrics:
+      - reports/metrics.json:
+          cache: false

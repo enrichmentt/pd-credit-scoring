@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Data & models
+# data/processed/ пересобирается через dvc repro, поэтому не храним в git.
+# Сырой CSV и models/model.joblib лежат в git, чтобы репозиторий работал
+# сразу после clone; DVC при этом продолжает их версионировать.
+data/processed/
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# Reports
+reports/metrics.json
+reports/train_scores.csv
+
+# Misc
+.ipynb_checkpoints/
+.DS_Store
+*.log
+
+# MLflow sqlite backend
+mlflow.db

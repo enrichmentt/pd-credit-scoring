@@ -1,0 +1,8 @@
+prepare:
+  test_size: 0.2
+  random_state: 42
+
+train:
+  model: gradient_boosting
+  run_name: gb_dvc_pipeline
+  cv: 3
